@@ -101,6 +101,9 @@ public class Stanza {
      * @return true se riesce ad aggiungere l'attrezzo, false atrimenti.
      */
     public boolean addAttrezzo(Attrezzo attrezzo) {
+    	if(attrezzo==null) {
+    		return false;
+    	}
         if (this.numeroAttrezzi < NUMERO_MASSIMO_ATTREZZI) {
         	this.attrezzi[numeroAttrezzi] = attrezzo;
         	this.numeroAttrezzi++;
@@ -159,7 +162,7 @@ public class Stanza {
 		for (Attrezzo attrezzo : this.attrezzi) {
 		    if (attrezzo != null && attrezzo.getNome() != null && attrezzo.getNome().equals(nomeAttrezzo)) {
 		        attrezzoCercato = attrezzo;
-		        break; // Opzionale: ferma il ciclo appena lo trovi per efficienza
+		        break; //  ferma il ciclo appena lo trovi 
 		    }
 		}
 		return attrezzoCercato;	
@@ -173,6 +176,16 @@ public class Stanza {
 	 */
 	public boolean removeAttrezzo(Attrezzo attrezzo) {
 		// TODO da implementare
+		if(attrezzo==null) {
+			return false;
+		}
+		Attrezzo[]attrezzi=this.getAttrezzi();
+		for(int i=0;i<attrezzi.length;i++) {
+			if(this.attrezzi[i]!=null && this.attrezzi[i].getNome().equals(attrezzo.getNome())) {
+				this.attrezzi[i]=null;
+				return true;
+			}
+		}
 		return false;
 	}
 
