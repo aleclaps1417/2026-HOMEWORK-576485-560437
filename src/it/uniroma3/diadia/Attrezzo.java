@@ -1,6 +1,4 @@
-
-
-
+package it.uniroma3.diadia;
 
 /**
  * Una semplice classe che modella un attrezzo.

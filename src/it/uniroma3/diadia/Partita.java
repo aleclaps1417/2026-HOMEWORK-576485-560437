@@ -1,7 +1,4 @@
-
-
-
-
+package it.uniroma3.diadia;
 /**
  * Questa classe modella una partita del gioco
  *
