@@ -26,7 +26,7 @@ public class PartitaTest {
     @Test
     public void testVintaVintaTrue() {
         // Spostiamo il giocatore nella stanza vincente
-        Stanza stanzaVincente = this.partita.getStanzaVincente();
+        Stanza stanzaVincente = this.partita.getLabirinto().getStanzaVincente();
         this.partita.setStanzaCorrente(stanzaVincente);
         assertTrue(this.partita.vinta());
     }
@@ -52,7 +52,7 @@ public class PartitaTest {
     @Test
     public void testIsFinitaVintaTrue() {
         // Se la partita è vinta, risulta anche finita
-        Stanza stanzaVincente = this.partita.getStanzaVincente();
+        Stanza stanzaVincente = this.partita.getLabirinto().getStanzaVincente();
         this.partita.setStanzaCorrente(stanzaVincente);
         assertTrue(this.partita.isFinita());
     }
