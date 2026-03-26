@@ -60,7 +60,8 @@ public class PartitaTest {
     @Test
     public void testIsFinitaCfuZeroTrue() {
         //Se i CFU scendono a 0, la partita è finita
-        this.partita.setCfu(0);
+       // this.partita.setCfu(0);
+    	this.partita.getGiocatore().setCfu(0);
         assertTrue(this.partita.isFinita());
     }
 }

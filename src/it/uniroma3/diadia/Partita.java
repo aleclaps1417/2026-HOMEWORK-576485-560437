@@ -9,17 +9,19 @@ package it.uniroma3.diadia;
 
 public class Partita {
 
-	static final private int CFU_INIZIALI = 20;
+	//NON PIU SUA COMPETENZA static final private int CFU_INIZIALI = 20;
 
 	private Stanza stanzaCorrente;
 	private Stanza stanzaVincente;
 	private boolean finita;
-	private int cfu;
+	private Giocatore giocatore;
+	//NON PIU SUA COMPETENZA private int cfu;
 	
 	public Partita(){
 		creaStanze();
 		this.finita = false;
-		this.cfu = CFU_INIZIALI;
+		//NON PIU SUA COMPETENZA this.cfu = CFU_INIZIALI;
+		this.giocatore=new Giocatore();
 	}
 
     /**
@@ -86,7 +88,8 @@ public class Partita {
 	 * @return vero se partita finita
 	 */
 	public boolean isFinita() {
-		return finita || vinta() || (cfu == 0);
+		//return finita || vinta() || (cfu == 0);
+		return finita || vinta() || (this.giocatore.getCfu()==0) ;
 	}
 
 	/**
@@ -96,7 +99,11 @@ public class Partita {
 	public void setFinita() {
 		this.finita = true;
 	}
-
+	
+	public Giocatore getGiocatore() {
+		return this.giocatore;
+	}
+	/*
 	public int getCfu() {
 		return this.cfu;
 	}
@@ -104,4 +111,5 @@ public class Partita {
 	public void setCfu(int cfu) {
 		this.cfu = cfu;		
 	}	
+	*/
 }
