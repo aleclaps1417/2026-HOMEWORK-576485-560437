@@ -179,10 +179,11 @@ public class Stanza {
 		if(attrezzo==null) {
 			return false;
 		}
-		Attrezzo[]attrezzi=this.getAttrezzi();
-		for(int i=0;i<attrezzi.length;i++) {
+		for(int i=0;i<this.numeroAttrezzi;i++) {
 			if(this.attrezzi[i]!=null && this.attrezzi[i].getNome().equals(attrezzo.getNome())) {
-				this.attrezzi[i]=null;
+				this.attrezzi[i]=this.attrezzi[numeroAttrezzi-1];
+				this.attrezzi[this.numeroAttrezzi-1]=null;
+				this.numeroAttrezzi--;
 				return true;
 			}
 		}
