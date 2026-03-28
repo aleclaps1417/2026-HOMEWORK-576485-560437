@@ -27,7 +27,7 @@ public class DiaDia {
 			"o regalarli se pensi che possano ingraziarti qualcuno.\n\n"+
 			"Per conoscere le istruzioni usa il comando 'aiuto'.";
 	
-	static final private String[] elencoComandi = {"vai", "aiuto", "fine"};
+	static final private String[] elencoComandi = {"vai", "aiuto", "fine", "prendi", "posa"};
 
 	private Partita partita;
 
@@ -53,26 +53,73 @@ public class DiaDia {
 	 * @return true se l'istruzione e' eseguita e il gioco continua, false altrimenti
 	 */
 	private boolean processaIstruzione(String istruzione) {
-		Comando comandoDaEseguire = new Comando(istruzione);
+	    Comando comandoDaEseguire = new Comando(istruzione);
 
-		if (comandoDaEseguire.getNome().equals("fine")) {
-			this.fine(); 
-			return true;
-		} else if (comandoDaEseguire.getNome().equals("vai"))
-			this.vai(comandoDaEseguire.getParametro());
-		else if (comandoDaEseguire.getNome().equals("aiuto"))
-			this.aiuto();
-		else
-			System.out.println("Comando sconosciuto");
-		if (this.partita.vinta()) {
-			System.out.println("Hai vinto!");
-			return true;
-		} else
-			return false;
-	}   
-
+	    if (comandoDaEseguire.getNome().equals("fine")) {
+	        this.fine(); 
+	        return true;
+	    } else if (comandoDaEseguire.getNome().equals("vai")) {
+	        this.vai(comandoDaEseguire.getParametro());
+	    } else if (comandoDaEseguire.getNome().equals("prendi")) { 
+	        this.prendi(comandoDaEseguire.getParametro());
+	    } else if (comandoDaEseguire.getNome().equals("posa")) {   
+	        this.posa(comandoDaEseguire.getParametro());
+	    } else if (comandoDaEseguire.getNome().equals("aiuto")) {
+	        this.aiuto();
+	    } else {
+	        System.out.println("Comando sconosciuto");
+	    }
+	    
+	    if (this.partita.vinta()) {
+	        System.out.println("Hai vinto!");
+	        return true;
+	    } else {
+	        return false;
+	    }
+	}
 	// implementazioni dei comandi dell'utente:
 
+	/**
+	 * Comando "Prendi".
+	 */
+	private void prendi(String nomeAttrezzo) {
+	    if (nomeAttrezzo == null) {
+	        System.out.println("Cosa vuoi prendere?");
+	        return;
+	    }
+	    
+	    Stanza stanzaCorrente = this.partita.getStanzaCorrente();
+	    Attrezzo attrezzo = stanzaCorrente.getAttrezzo(nomeAttrezzo);
+	    
+	    if (attrezzo != null) {
+	        this.partita.getGiocatore().getBorsa().addAttrezzo(attrezzo);
+	        stanzaCorrente.removeAttrezzo(attrezzo);
+	        System.out.println("Hai preso: " + attrezzo.getNome());
+	    } else {
+	        System.out.println("Attrezzo non presente in questa stanza.");
+	    }
+	}
+	
+	/**
+	 * Comando "Posa".
+	 */
+	private void posa(String nomeAttrezzo) {
+	    if (nomeAttrezzo == null) {
+	        System.out.println("Cosa vuoi posare?");
+	        return;
+	    }
+	    
+	    Borsa borsa = this.partita.getGiocatore().getBorsa();
+	    Attrezzo attrezzo = borsa.getAttrezzo(nomeAttrezzo);
+	    
+	    if (attrezzo != null) {
+	        this.partita.getStanzaCorrente().addAttrezzo(attrezzo);
+	        borsa.removeAttrezzo(nomeAttrezzo);
+	        System.out.println("Hai posato: " + attrezzo.getNome());
+	    } else {
+	        System.out.println("Attrezzo non presente nella borsa.");
+	    }
+	}
 	/**
 	 * Stampa informazioni di aiuto.
 	 */
