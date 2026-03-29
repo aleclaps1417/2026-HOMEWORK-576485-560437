@@ -14,13 +14,13 @@ import it.uniroma3.diadia.giocatore.Giocatore;
 
 public class Partita {
 
-	//NON PIU SUA COMPETENZA static final private int CFU_INIZIALI = 20;
+	
 
 	private Stanza stanzaCorrente;
 	private Labirinto labirinto;// Nuovo riferimento richiesto
 	private boolean finita;
 	private Giocatore giocatore;
-	//NON PIU SUA COMPETENZA private int cfu;
+	
 	
 	public Partita(){
 		this.labirinto = new Labirinto(); // Deleghiamo la creazione
@@ -71,13 +71,5 @@ public class Partita {
 	public Giocatore getGiocatore() {
 		return this.giocatore;
 	}
-	/*
-	public int getCfu() {
-		return this.cfu;
-	}
-
-	public void setCfu(int cfu) {
-		this.cfu = cfu;		
-	}	
-	*/
+	
 }
