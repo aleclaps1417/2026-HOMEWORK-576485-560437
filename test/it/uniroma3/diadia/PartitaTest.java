@@ -66,4 +66,21 @@ public class PartitaTest {
     	this.partita.getGiocatore().setCfu(0);
         assertTrue(this.partita.isFinita());
     }
+    @Test
+    public void testSetFinita() {
+    	this.partita.setFinita();
+    	assertTrue(this.partita.isFinita());
+    }
+    @Test
+    public void testGiocatoreIsVivoNo() {
+    	this.partita.getGiocatore().setCfu(0);
+    	assertFalse("Il giocatore dovrebbe essere morto",this.partita.giocatoreIsVivo());
+    }
+    
+    @Test
+    public void testGiocatoreIsVivoSi() {
+    	assertTrue("Ad inizio partita il giocatore ha i cfu quindi dovrebbe essere vivo"
+    			,this.partita.giocatoreIsVivo());
+    }
+    
 }
