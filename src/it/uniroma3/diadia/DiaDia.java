@@ -3,6 +3,9 @@ package it.uniroma3.diadia;
 
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import it.uniroma3.diadia.comandi.Comando;
+import it.uniroma3.diadia.comandi.FabbricaDiComandi;
+import it.uniroma3.diadia.comandi.FabbricaDiComandiFisarmonica;
 import it.uniroma3.diadia.giocatore.Borsa;
 
 /**
@@ -29,7 +32,7 @@ public class DiaDia {
 			"o regalarli se pensi che possano ingraziarti qualcuno.\n\n"+
 			"Per conoscere le istruzioni usa il comando 'aiuto'.";
 	
-	static final private String[] elencoComandi = {"vai", "aiuto", "fine", "prendi", "posa"};
+	
 
 	private Partita partita;
 	private IOConsole console;
@@ -53,108 +56,21 @@ public class DiaDia {
 	 * @return true se l'istruzione e' eseguita e il gioco continua, false altrimenti
 	 */
 	private boolean processaIstruzione(String istruzione) {
-	    Comando comandoDaEseguire = new Comando(istruzione);
-
-	    if (comandoDaEseguire.getNome().equals("fine")) {
-	        this.fine(); 
-	        return true;
-	    } else if (comandoDaEseguire.getNome().equals("vai")) {
-	        this.vai(comandoDaEseguire.getParametro());
-	    } else if (comandoDaEseguire.getNome().equals("prendi")) { 
-	        this.prendi(comandoDaEseguire.getParametro());
-	    } else if (comandoDaEseguire.getNome().equals("posa")) {   
-	        this.posa(comandoDaEseguire.getParametro());
-	    } else if (comandoDaEseguire.getNome().equals("aiuto")) {
-	        this.aiuto();
-	    } else {
-	    	this.console.mostraMessaggio("Comando sconosciuto");
-	    }
-	    
-	    if (this.partita.vinta()) {
-	    	this.console.mostraMessaggio("Hai vinto!");
-	        return true;
-	    } else {
-	        return false;
-	    }
-	}
-	// implementazioni dei comandi dell'utente:
-
-	/**
-	 * Comando "Prendi".
-	 */
-	private void prendi(String nomeAttrezzo) {
-	    if (nomeAttrezzo == null) {
-	    	this.console.mostraMessaggio("Cosa vuoi prendere?");
-	        return;
-	    }
-	    
-	    Stanza stanzaCorrente = this.partita.getStanzaCorrente();
-	    Attrezzo attrezzo = stanzaCorrente.getAttrezzo(nomeAttrezzo);
-	    
-	    if (attrezzo != null) {
-	        this.partita.getGiocatore().getBorsa().addAttrezzo(attrezzo);
-	        stanzaCorrente.removeAttrezzo(attrezzo);
-	        this.console.mostraMessaggio("Hai preso: " + attrezzo.getNome());
-	    } else {
-	    	this.console.mostraMessaggio("Attrezzo non presente in questa stanza.");
-	    }
+		FabbricaDiComandi factory=new FabbricaDiComandiFisarmonica();
+		Comando comandoDaEseguire = factory.costruisciComando(istruzione);
+		comandoDaEseguire.esegui(this.partita);
+		
+		if(this.partita.vinta()) {
+			System.out.println("Hai vinto");
+		}
+		if (!this.partita.giocatoreIsVivo()) {
+			System.out.println("Hai esaurito i CFU...");
+		}
+		return this.partita.isFinita();
+		
 	}
 	
-	/**
-	 * Comando "Posa".
-	 */
-	private void posa(String nomeAttrezzo) {
-	    if (nomeAttrezzo == null) {
-	    	this.console.mostraMessaggio("Cosa vuoi posare?");
-	        return;
-	    }
-	    
-	    Borsa borsa = this.partita.getGiocatore().getBorsa();
-	    Attrezzo attrezzo = borsa.getAttrezzo(nomeAttrezzo);
-	    
-	    if (attrezzo != null) {
-	        this.partita.getStanzaCorrente().addAttrezzo(attrezzo);
-	        borsa.removeAttrezzo(nomeAttrezzo);
-	        this.console.mostraMessaggio("Hai posato: " + attrezzo.getNome());
-	    } else {
-	    	 this.console.mostraMessaggio("Attrezzo non presente nella borsa.");
-	    }
-	}
-	/**
-	 * Stampa informazioni di aiuto.
-	 */
-	private void aiuto() {
-		StringBuilder risultato = new StringBuilder();
-		for(int i=0; i< elencoComandi.length; i++) 
-			risultato.append(elencoComandi[i]).append(" ");
-		 this.console.mostraMessaggio(risultato.toString());
-	}
 
-	/**
-	 * Cerca di andare in una direzione. Se c'e' una stanza ci entra 
-	 * e ne stampa il nome, altrimenti stampa un messaggio di errore
-	 */
-	private void vai(String direzione) {
-		if(direzione==null)
-			 this.console.mostraMessaggio("Dove vuoi andare ?");
-		Stanza prossimaStanza = null;
-		prossimaStanza = this.partita.getStanzaCorrente().getStanzaAdiacente(direzione);
-		if (prossimaStanza == null)
-			 this.console.mostraMessaggio("Direzione inesistente");
-		else {
-			this.partita.setStanzaCorrente(prossimaStanza);
-			int cfu = this.partita.getGiocatore().getCfu();
-			this.partita.getGiocatore().setCfu(cfu--);
-		}
-		 this.console.mostraMessaggio(partita.getStanzaCorrente().getDescrizione());
-	}
-
-	/**
-	 * Comando "Fine".
-	 */
-	private void fine() {
-		 this.console.mostraMessaggio("Grazie di aver giocato!");  // si desidera smettere
-	}
 
 	public static void main(String[] argc) {
 		IOConsole console = new IOConsole();
