@@ -35,18 +35,17 @@ public class DiaDia {
 	
 
 	private Partita partita;
-	private IOConsole console;
+	private IO io;
 
-	public DiaDia(IOConsole console) {
+	public DiaDia(IO io) {
 		this.partita = new Partita();
-		this.console = console;
 	}
 
 	public void gioca() {
 		String istruzione; 
-		this.console.mostraMessaggio(MESSAGGIO_BENVENUTO);
+		this.io.mostraMessaggio(MESSAGGIO_BENVENUTO);
 		do {
-		    istruzione = this.console.leggiRiga();
+		    istruzione = this.io.leggiRiga();
 		} while (!processaIstruzione(istruzione));
 	}
 
@@ -73,8 +72,8 @@ public class DiaDia {
 
 
 	public static void main(String[] argc) {
-		IOConsole console = new IOConsole();
-		DiaDia gioco = new DiaDia(console);
+		IO io = new IOConsole();
+		DiaDia gioco = new DiaDia(io);
 		gioco.gioca();
 	}
 }
