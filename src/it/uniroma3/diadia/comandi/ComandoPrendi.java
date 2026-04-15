@@ -1,5 +1,6 @@
 package it.uniroma3.diadia.comandi;
 
+import it.uniroma3.diadia.IO;
 import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
@@ -13,9 +14,9 @@ public class ComandoPrendi implements Comando{
 	}
 	
 	@Override
-	public void esegui(Partita partita) {
+	public void esegui(Partita partita,IO io) {
 		if(this.nomeAttrezzo==null) {
-			System.out.println("Quale attrezzo vuoi prendere ?");
+			io.mostraMessaggio("Quale attrezzo vuoi prendere ?");
 			return ;
 		}
 		Stanza stanzaCorrente=partita.getStanzaCorrente();
@@ -24,14 +25,14 @@ public class ComandoPrendi implements Comando{
 			boolean aggiunto=partita.getGiocatore().getBorsa().addAttrezzo(attrezzo);
 			if(aggiunto) {
 				stanzaCorrente.removeAttrezzo(attrezzo);
-				System.out.println("Hai preso: "+nomeAttrezzo);
+				io.mostraMessaggio("Hai preso: "+nomeAttrezzo);
 			}
 			else {
-				System.out.println("Borsa troppo piena");
+				io.mostraMessaggio("Borsa troppo piena");
 			}
 		}
 		else {
-			System.out.println("Attrezzo non presente nella stanza ");
+			io.mostraMessaggio("Attrezzo non presente nella stanza ");
 		}
 	}
 	

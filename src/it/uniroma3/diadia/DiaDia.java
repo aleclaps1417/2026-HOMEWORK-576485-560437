@@ -39,7 +39,8 @@ public class DiaDia {
 
 	public DiaDia(IO io) {
 		this.partita = new Partita();
-	}
+		this.io=io;	
+		}
 
 	public void gioca() {
 		String istruzione; 
@@ -57,13 +58,13 @@ public class DiaDia {
 	private boolean processaIstruzione(String istruzione) {
 		FabbricaDiComandi factory=new FabbricaDiComandiFisarmonica();
 		Comando comandoDaEseguire = factory.costruisciComando(istruzione);
-		comandoDaEseguire.esegui(this.partita);
+		comandoDaEseguire.esegui(this.partita,this.io);
 		
 		if(this.partita.vinta()) {
-			System.out.println("Hai vinto");
+			io.mostraMessaggio("Hai vinto");
 		}
 		if (!this.partita.giocatoreIsVivo()) {
-			System.out.println("Hai esaurito i CFU...");
+			io.mostraMessaggio("Hai esaurito i CFU...");
 		}
 		return this.partita.isFinita();
 		

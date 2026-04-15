@@ -1,14 +1,15 @@
 package it.uniroma3.diadia.comandi;
 
+import it.uniroma3.diadia.IO;
 import it.uniroma3.diadia.Partita;
 
 public class ComandoGuarda implements Comando{
 	
 	@Override
-	public void esegui(Partita partita) {
-		System.out.println("Ti trovi in: "+ partita.getStanzaCorrente().getDescrizione());
-		System.out.println("CFU residui: "+ partita.getGiocatore().getCfu());
-		System.out.println(partita.getGiocatore().getBorsa().toString());
+	public void esegui(Partita partita,IO io) {
+		io.mostraMessaggio("Ti trovi in: "+ partita.getStanzaCorrente().getDescrizione());
+		io.mostraMessaggio("CFU residui: "+ partita.getGiocatore().getCfu());
+		io.mostraMessaggio(partita.getGiocatore().getBorsa().toString());
 	}
 	
 	@Override
