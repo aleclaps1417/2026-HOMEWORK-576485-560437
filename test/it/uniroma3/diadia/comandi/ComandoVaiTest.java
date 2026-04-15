@@ -62,4 +62,15 @@ class ComandoVaiTest {
 		assertEquals("I cfu non dovrebbero essere diminuiti(20 di default)",
 				20,this.partita.getGiocatore().getCfu());
 	}
+	
+	@Test
+	public void testGetNome() {
+		assertEquals("Il nome del comando deve essere vai","vai",this.comando.getNome());
+	}
+	@Test
+	public void testGetParamentro() {
+		this.comando.setParametro("nord");
+		assertEquals("Il nome del parametro dovrebb essere nord","nord",this.comando.getParametro());
+		
+	}
 }

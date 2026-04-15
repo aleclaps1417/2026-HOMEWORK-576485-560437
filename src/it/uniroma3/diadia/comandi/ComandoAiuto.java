@@ -19,5 +19,12 @@ public class ComandoAiuto implements Comando{
 	@Override
 	public void setParametro(String parametro) {};
 	
-	
+	@Override
+	public String getNome() {
+		return "aiuto";
+	}
+	@Override
+	public String getParametro() {
+		return null;
+	}
 }

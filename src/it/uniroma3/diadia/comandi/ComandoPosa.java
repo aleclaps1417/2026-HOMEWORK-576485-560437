@@ -33,5 +33,15 @@ public class ComandoPosa implements Comando{
 			io.mostraMessaggio("Attrezzo non presente in borsa");
 		}
 	}
+	
+	@Override
+	public String getNome() {
+		return "posa";
+	}
+	
+	@Override
+	public String getParametro() {
+		return this.nomeAttrezzo;
+	}
 
 }

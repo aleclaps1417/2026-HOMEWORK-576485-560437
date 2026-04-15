@@ -13,4 +13,12 @@ public class ComandoFine implements Comando {
 		io.mostraMessaggio("Grazie per aver giocato");
 		partita.setFinita();
 	}
+	@Override
+	public String getNome() {
+		return "fine";
+	}
+	@Override
+	public String getParametro() {
+		return null;
+	}
 }

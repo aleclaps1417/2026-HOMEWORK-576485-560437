@@ -77,6 +77,16 @@ class ComandoPosaTest {
 		assertEquals("L'attrezzo dovrebbe rimanere nella borsa","martello",this.partita.getGiocatore().getBorsa().getAttrezzo("martello").getNome());
 		assertFalse("L'attrezzo non dovrebbe trovarsi nella stanza poiche non posato",this.partita.getStanzaCorrente().hasAttrezzo("martello"));
 	}
+	@Test
+	public void testGetNome() {
+		assertEquals("Il nome del comando deve essere posa","posa",this.comando.getNome());
+	}
+	
+	@Test
+	public void testSetParametroEGetParametro() {
+		this.comando.setParametro("martello");
+		assertEquals("Il parametro dovrebbe essere martello","martello",this.comando.getParametro());
+	}
 
 
 

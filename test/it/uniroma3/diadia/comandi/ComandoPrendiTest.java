@@ -2,8 +2,7 @@ package it.uniroma3.diadia.comandi;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-
+import static org.junit.Assert.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,6 +61,16 @@ class ComandoPrendiTest {
 		this.comando.esegui(this.partita,this.io);
 		assertTrue("Gli attrezzi nella stanza non dovrebbero cambiare",this.partita.getStanzaCorrente().hasAttrezzo("martello"));
 		assertFalse("La borsa non dovrebbe cambiare",this.partita.getGiocatore().getBorsa().hasAttrezzo("martello"));
+	}
+	
+	@Test
+	public void testGetNome() {
+		assertEquals("Il nome del comando dovrebbe essere prendi","prendi", this.comando.getNome());
+	}
+	@Test
+	public void testSetEGetParametro() {
+		this.comando.setParametro("martello");
+		assertEquals("Il nome del parametro dovrebbe essere martello ","martello",this.comando.getParametro());
 	}
 
 
