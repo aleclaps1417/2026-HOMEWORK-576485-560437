@@ -15,7 +15,7 @@ public class ComandoPosa implements Comando{
 	@Override
 	public void esegui(Partita partita,IO io) {
 		if(this.nomeAttrezzo==null) {
-			System.out.println("Quale attrezzo vuoi posare ?");
+			io.mostraMessaggio("Quale attrezzo vuoi posare ?");
 		}
 		
 		Attrezzo attrezzo=partita.getGiocatore().getBorsa().getAttrezzo(this.nomeAttrezzo);
