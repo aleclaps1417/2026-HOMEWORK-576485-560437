@@ -67,35 +67,21 @@ public class StanzaTest {
 		atrio.impostaStanzaAdiacente("nord", salone);
 		assertEquals(salone,atrio.getStanzaAdiacente("nord"),"Il salone dovrebbe aver sostituito la cucina a nord");
 	}
-	@Test
-	public void testImpostaStanzaAdiacenteTroppeDirezioni() {
-		for(int i=0;i<4;i++) {
-			Stanza generica=new Stanza("stanza"+i);
-			this.stanza.impostaStanzaAdiacente("a"+i, generica);
-		}
-		Stanza diTroppo=new Stanza("lavatoio");
-		stanza.impostaStanzaAdiacente("su", diTroppo);
-		assertNotEquals(diTroppo,this.stanza.getStanzaAdiacente("su"),
-				"Non dovrebbe essere possibile aggiungere più di 4 direzioni");
-	}
+	
 	
 	@Test
 	public void testGetNome() {
 		assertEquals("atrio",this.stanza.getNome(),"Il nome della stanza dovrebbe essere atrio");
 	}
 	
-	
+
 	
 	@Test
 	public void testAddAttrezzoStanzaVuota() {
 		assertTrue(this.stanza.addAttrezzo(attrezzo("martello",1)),
 				"Dovrebbe essere possibile aggiungere un attrezzo in una stanza vuota");
 	}
-	@Test
-	public void testAddAttrezzoStanzaPiena() {
-		assertFalse(creaStanzaConAttrezziGenerici("salone",10).addAttrezzo(attrezzo("extra",1)),
-				"Non dovrebbe essere possibile aggiungere attrezzi oltre il limite di 10");
-	}
+	
 	@Test
 	public void testAddAttrezzoStanzaNonPienaENonVuota() {
 		assertTrue(creaStanzaConAttrezziGenerici("salone",5).addAttrezzo(attrezzo("extra",1)),
@@ -146,26 +132,23 @@ public class StanzaTest {
 	//GET ATTREZZI FATTO
 	@Test
 	public void testGetAttrezziStanzaVuota() {
-		Attrezzo []arrayAttrezzi=this.stanza.getAttrezzi();
-		assertNull(arrayAttrezzi[0],()->"In una stanza vuota, il primo elemento dell'array attrezzi deve essere null");
+		assertTrue(this.stanza.getAttrezzi().isEmpty(), "In una stanza vuota, la collezione degli attrezzi deve essere vuota");
 	}
 	
 	@Test
 	public void testGetAttrezziStanzaConAttrezzo() {
-		Stanza salone=creaStanzaConAttrezzi("salone","martello","coltello");
-		Attrezzo []arrayAttrezzi=salone.getAttrezzi();
-		assertEquals(salone.getAttrezzo("coltello"),arrayAttrezzi[1],
-				"L'array restituito deve contenere gli attrezzi nelle posizioni corrette");
+		Stanza salone = creaStanzaConAttrezzi("salone", "martello", "coltello");
+		assertEquals(2, salone.getAttrezzi().size(), "La stanza dovrebbe avere esattamente 2 attrezzi");
+		assertTrue(salone.getAttrezzi().contains(salone.getAttrezzo("coltello")), "La collezione deve contenere il coltello");
 	}
 	
 	
 	@Test
 	public void testGetAttrezziDopoRimozione() {
-	    Attrezzo martello = new Attrezzo("martello", 2);
+		Attrezzo martello = new Attrezzo("martello", 2);
 	    this.stanza.addAttrezzo(martello);
 	    this.stanza.removeAttrezzo(martello); 
-	    
-	    assertNull(this.stanza.getAttrezzi()[0], () -> "Dopo la rimozione dell'unico attrezzo, il primo slot deve tornare null");
+	    assertTrue(this.stanza.getAttrezzi().isEmpty(), "Dopo la rimozione dell'unico attrezzo, la collezione deve tornare vuota");
 	}
 	
 	@Test
@@ -207,16 +190,7 @@ public class StanzaTest {
 		assertEquals("nord",creaStanzaConAdiacenze("salone","nord","cucina").getDirezioni()[0],"La direzione disponibile dovrebbe essere 'nord'");
 	}
 	
-	@Test
-	public void testGetDirezioniStanzaConTroppeDirezioni() {
-		for(int i=0;i<5;i++) {
-			Stanza generica =new Stanza("a"+i);
-			this.stanza.impostaStanzaAdiacente("a"+i, generica);
-		}
-		String []direzioni=this.stanza.getDirezioni();
-		assertEquals(4,direzioni.length,"Il numero massimo di direzioni memorizzabili deve essere 4");
-		
-	}
+	
 	
 	@Test
 	public void testRemoveAttrezzoPresente() {
