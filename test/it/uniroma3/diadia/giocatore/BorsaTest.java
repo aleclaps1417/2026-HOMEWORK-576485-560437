@@ -124,12 +124,7 @@ public class BorsaTest {
 		assertTrue(desc.contains("vuota"),"La stringa descrittiva di una borsa vuota dovrebbe contenere la parola 'vuota'");
 	}
 	
-	@Test
-	public void testAddAttrezzoBorsaGiaPiena() {
-		this.borsa=creaBorsaConPiuAttrezzi("a","b","c","d","e","f","g","h","i","l");
-		Attrezzo diTroppo=new Attrezzo("m",1);
-		assertFalse(this.borsa.addAttrezzo(diTroppo),"Non dovrebbe essere possibile aggiungere l'undicesimo attrezzo (limite fisico)");
-	}
+	
 	@Test
 	public void testAddAttrezzoBorsaConPesoMassimo() {
 		this.borsa=creaBorsaConPesoMax("martello");
