@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.SortedSet;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -129,6 +131,15 @@ public class BorsaTest {
 	public void testAddAttrezzoBorsaConPesoMassimo() {
 		this.borsa=creaBorsaConPesoMax("martello");
 		assertFalse(this.borsa.addAttrezzo(new Attrezzo("chiodo",1)),"Non dovrebbe essere possibile aggiungere attrezzi se si supera il peso massimo di 10kg");
+	}
+	
+	@Test
+	public void testGetSortedSetOrdinatoPerPeso_StessoPesoNomeDiverso() {
+		this.borsa.addAttrezzo(new Attrezzo("piombo",3));
+		this.borsa.addAttrezzo(new Attrezzo("ps", 3));
+		
+		SortedSet<Attrezzo>finale=this.borsa.getSortedSetOrdinatoPerPeso();
+		assertEquals(2,finale.size());
 	}
 	
 
