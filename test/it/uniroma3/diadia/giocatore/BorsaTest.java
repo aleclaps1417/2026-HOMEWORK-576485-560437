@@ -1,18 +1,19 @@
 package it.uniroma3.diadia.giocatore;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
-import it.uniroma3.diadia.giocatore.Borsa;
 
 public class BorsaTest {
 	private Borsa borsa;
@@ -33,6 +34,12 @@ public class BorsaTest {
 			this.borsa.addAttrezzo(new Attrezzo(nome,0));
 		}
 		return this.borsa;
+	}
+	private void popola(Attrezzo... attrezzi) {
+		for(Attrezzo a:attrezzi) {
+			this.borsa.addAttrezzo(a);
+		}
+		
 	}
 	private Borsa creaBorsaConPesoMax(String nomeAttezzo) {
 		Attrezzo attrezzo=new Attrezzo(nomeAttezzo,10);
@@ -135,12 +142,66 @@ public class BorsaTest {
 	
 	@Test
 	public void testGetSortedSetOrdinatoPerPeso_StessoPesoNomeDiverso() {
-		this.borsa.addAttrezzo(new Attrezzo("piombo",3));
-		this.borsa.addAttrezzo(new Attrezzo("ps", 3));
-		
+		popola(new Attrezzo("piombo",3),new Attrezzo("ps",3));
 		SortedSet<Attrezzo>finale=this.borsa.getSortedSetOrdinatoPerPeso();
 		assertEquals(2,finale.size());
 	}
+	
+	@Test
+	public void testGetContenutoOrdinatoPerNomeBorsaConAttrezzi() {
+		popola(new Attrezzo("martello",0),new Attrezzo("chiodo",0));
+		SortedSet<Attrezzo>risultato=this.borsa.getContenutoOrdinatoPerNome();
+		assertEquals("chiodo", risultato.getFirst().getNome(),"Il chiodo dovrebbe essere il primo elemento");
+	}
+	@Test
+	public void testGetContenutoOrdinatoPerNomeBorsaConUnAttrezzo() {
+		popola(new Attrezzo("martello",0));
+		SortedSet<Attrezzo>risultato=this.borsa.getContenutoOrdinatoPerNome();
+		assertEquals("martello", risultato.getFirst().getNome(),"Il martello dovrebbe essere il primo elemento");
+	}
+	@Test
+	public void testGetContenutoOrdinatoPerNomeBorsaVuota() {
+		SortedSet<Attrezzo>risultato=this.borsa.getContenutoOrdinatoPerNome();
+		assertEquals(0,risultato.size());
+	}
+	
+	@Test
+	public void testgetContenutoOrdinatoPerPesoLista() {
+		popola(new Attrezzo("chiodo",3),new Attrezzo("brucola",2));
+		List<Attrezzo>finale=this.borsa.getContenutoOrdinatoPerPeso();
+		assertEquals("brucola",finale.get(0).getNome(),"la brucola pesa di meso quindi va prima");
+	}
+	
+	@Test
+	public void testGetContenutoOrdinatoPerPesoUgualiLista() {
+		popola(new Attrezzo("chiodo",3),new Attrezzo("martello",3),new Attrezzo("brucola",3));
+		List<Attrezzo>finale=this.borsa.getContenutoOrdinatoPerPeso();
+		assertEquals("brucola",finale.get(0).getNome(),"La brucola dovrebbe andare prima");
+	}
+	
+	@Test
+	public void testGetSortedSetOrdinatoPerPeso() {
+		popola(new Attrezzo("chiodo",2),new Attrezzo("martello",1));
+		SortedSet<Attrezzo>finale=this.borsa.getSortedSetOrdinatoPerPeso();
+		assertEquals("martello",finale.first().getNome());
+	}
+	
+	@Test
+	public void testGetContenutoRaggruppatoPerPeso() {
+		popola(new Attrezzo("chiodo",2),new Attrezzo("martello",2),new Attrezzo("lanterna",3));
+		Map<Integer,Set<Attrezzo>>mappa=this.borsa.getContenutoRaggruppatoPerPeso();
+		assertEquals(2,mappa.size(),"Dovrebbero esserci 2 gruppi di pesi");
+		
+		Set<Attrezzo>setPeso2=mappa.get(2);
+		assertEquals(2,setPeso2.size());
+		assertTrue(setPeso2.contains(new Attrezzo("chiodo",2)));
+		assertTrue(setPeso2.contains(new Attrezzo("martello",2)));
+		
+		Set<Attrezzo>setPeso3=mappa.get(3);
+		assertEquals(1,setPeso3.size());
+		assertTrue(setPeso3.contains(new Attrezzo("lanterna",3)));
+	}
+	
 	
 
 	

@@ -129,4 +129,5 @@ public class Borsa {
 		ordinato.addAll(this.attrezzi.values());
 		return ordinato;
 	}
+
 }
