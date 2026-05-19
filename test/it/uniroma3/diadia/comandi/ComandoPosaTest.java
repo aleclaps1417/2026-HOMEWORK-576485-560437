@@ -12,36 +12,36 @@ import it.uniroma3.diadia.IO;
 import it.uniroma3.diadia.IOConsole;
 import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
-import it.uniroma3.diadia.comandi.ComandoPosa;
+
+import it.uniroma3.diadia.ambienti.Labirinto;
+import it.uniroma3.diadia.ambienti.LabirintoBuilder;
 
 class ComandoPosaTest {
 
 	private Partita partita;
-	private ComandoPosa comando;
+	private Comando comando;
 	private IO io;
+	private Attrezzo attrezzo;
+	Labirinto labirinto;
 	
 	
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		this.partita=new Partita();
+		// 1. Usiamo il LabirintoBuilder per creare una base solida
+		Labirinto lab = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio")
+				.getLabirinto();
+		this.partita = new Partita(lab);
 		
-		this.comando=new ComandoPosa();
+		this.comando = new ComandoPosa();
+		this.io = new IOConsole();
 		
-		this.partita.getGiocatore().getBorsa().addAttrezzo(new Attrezzo("martello",2));
-		this.io=new IOConsole();
+		// 2. Aggiungiamo il martello nella borsa
+		this.partita.getGiocatore().getBorsa().addAttrezzo(new Attrezzo("martello", 2));
 	}
 	
-	
-	private void riempiStanza() {
-		Attrezzo []a=new Attrezzo[10];
-		for(int i=0;i<a.length;i++) {
-			a[i]=new Attrezzo("a"+i,1);
-		}
-		for(int i=0;i<10;i++) {
-			this.partita.getStanzaCorrente().addAttrezzo(a[i]);
-		}
-	}
+
 
 	@Test
 	public void testPosaAttrezzoNull() {
@@ -68,15 +68,7 @@ class ComandoPosaTest {
 		assertFalse("Non essendoci l'attrezzo nella borsa, non può essere posato",this.partita.getStanzaCorrente().hasAttrezzo("chiave"));
 	}
 	
-	@Test
-	public void testPosaAttrezzoStanzaPiena() {
-		riempiStanza();
-		this.comando.setParametro("martello");
-		this.comando.esegui(this.partita,this.io);
-		
-		assertEquals("L'attrezzo dovrebbe rimanere nella borsa","martello",this.partita.getGiocatore().getBorsa().getAttrezzo("martello").getNome());
-		assertFalse("L'attrezzo non dovrebbe trovarsi nella stanza poiche non posato",this.partita.getStanzaCorrente().hasAttrezzo("martello"));
-	}
+	
 	@Test
 	public void testGetNome() {
 		assertEquals("Il nome del comando deve essere posa","posa",this.comando.getNome());

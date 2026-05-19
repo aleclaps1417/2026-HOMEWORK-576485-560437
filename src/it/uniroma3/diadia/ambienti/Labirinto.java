@@ -61,8 +61,18 @@ public class Labirinto {
     public Stanza getStanzaVincente() {
         return stanzaVincente;
     }
+    
+    public void setStanzaVincente(Stanza stanzaVincente) {
+        this.stanzaVincente = stanzaVincente;
+    }
 
     public Stanza getStanzaIniziale() {
         return stanzaIniziale;
     }
+    
+    public void setStanzaIniziale(Stanza stanzaIniziale) {
+        this.stanzaIniziale = stanzaIniziale;
+    }
+     
+    
 }

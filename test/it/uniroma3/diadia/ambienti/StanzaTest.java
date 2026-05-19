@@ -1,6 +1,6 @@
 package it.uniroma3.diadia.ambienti;
 
-
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -181,13 +181,15 @@ public class StanzaTest {
 	
 	@Test
 	public void testGetDirezioniStanzaSenzaCollegamenti() {
-		String []direzioni=this.stanza.getDirezioni();
-		assertEquals(0,direzioni.length,"Una stanza senza adiacenze deve restituire un array di direzioni vuoto");
+		List<String> direzioni = this.stanza.getDirezioni();
+		assertTrue(direzioni.isEmpty(), "Una stanza senza adiacenze deve restituire un set di direzioni vuoto");
 	}
 	@Test
 	public void testGetDirezioniStanzaCollegata() {
-		assertEquals(1,creaStanzaConAdiacenze("salone","nord","cucina").getDirezioni().length,"Dovrebbe esserci esattamente una direzione disponibile");
-		assertEquals("nord",creaStanzaConAdiacenze("salone","nord","cucina").getDirezioni()[0],"La direzione disponibile dovrebbe essere 'nord'");
+    List<String> direzioni = creaStanzaConAdiacenze("salone","nord","cucina").getDirezioni();
+		
+		assertEquals(1, direzioni.size(), "Dovrebbe esserci esattamente una direzione disponibile");
+		assertTrue(direzioni.contains("nord"), "La direzione disponibile dovrebbe essere 'nord'");
 	}
 	
 	

@@ -1,10 +1,11 @@
 package it.uniroma3.diadia.ambienti;
 
-import java.util.Collection;
-
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
@@ -54,6 +55,10 @@ public class Stanza {
 	public Stanza getStanzaAdiacente(String direzione) {
 		return this.stanzeAdiacenti.get(direzione);
 	}
+	
+	public Map<String, Stanza> getMapStanzeAdiacenti() {
+	    return this.stanzeAdiacenti;
+	}
 
     /**
      * Restituisce la nome della stanza.
@@ -75,8 +80,8 @@ public class Stanza {
      * Restituisce la collezione di attrezzi presenti nella stanza.
      * @return la collezione di attrezzi nella stanza.
      */
-    public Collection<Attrezzo> getAttrezzi() {
-        return this.attrezzi.values();
+    public List<Attrezzo> getAttrezzi() {
+        return new ArrayList<>(this.attrezzi.values());
     }
 
     /**
@@ -143,9 +148,29 @@ public class Stanza {
 	}
 
 
-	public String[] getDirezioni() {
-		Set<String> direzioni = this.stanzeAdiacenti.keySet();
-		return direzioni.toArray(new String[0]);
-    }
+	public List<String> getDirezioni() {
+	    return new ArrayList<>(this.stanzeAdiacenti.keySet());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		// Usare instanceof è fondamentale qui, così accetta anche le sottoclassi!
+		if (!(obj instanceof Stanza))
+			return false;
+		Stanza that = (Stanza) obj;
+		return this.getNome().equals(that.getNome());
+	}
+
+	@Override
+	public int hashCode() {
+		// Quando usi le Map (come per le stanze adiacenti), 
+		// avere un hashCode coerente con equals è obbligatorio!
+		return this.getNome().hashCode();
+	}
+
 
 }

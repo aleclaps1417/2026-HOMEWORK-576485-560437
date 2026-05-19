@@ -13,15 +13,26 @@ import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 import it.uniroma3.diadia.comandi.ComandoPrendi;
 
+import it.uniroma3.diadia.ambienti.Labirinto;
+import it.uniroma3.diadia.ambienti.LabirintoBuilder;
+
 class ComandoPrendiTest {
 	
 	private Partita partita;
 	private ComandoPrendi comando;
 	private IO io;
+	
+	Labirinto labirinto;
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		this.partita=new Partita();
+		labirinto = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio")
+				.addAttrezzo("martello", 3)
+				.addStanzaVincente("Biblioteca")
+				.addAdiacenza("Atrio", "Biblioteca", "nord")
+				.getLabirinto();
+		this.partita=new Partita(labirinto);
 		this.comando=new ComandoPrendi();
 		
 		this.partita.getStanzaCorrente().addAttrezzo(new Attrezzo("martello",2));

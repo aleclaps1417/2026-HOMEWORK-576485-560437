@@ -20,19 +20,33 @@ public class Partita {
 	private Labirinto labirinto;// Nuovo riferimento richiesto
 	private boolean finita;
 	private Giocatore giocatore;
-	
-	
-	public Partita(){
-		this.labirinto = new Labirinto(); // Deleghiamo la creazione
-		this.stanzaCorrente = this.labirinto.getStanzaIniziale(); // Prendiamo l'entrata dal labirinto
-		this.finita = false;
-		//NON PIU SUA COMPETENZA this.cfu = CFU_INIZIALI;
-		this.giocatore=new Giocatore();
+
+
+	/**
+	 * Crea una partita nel labirinto specificato.
+	 * @param labirinto il labirinto in cui giocare
+	 */
+	public Partita(Labirinto labirinto) {
+	    this.labirinto = labirinto;
+	    // La stanza corrente deve essere l'entrata del nuovo labirinto
+	    this.stanzaCorrente = labirinto.getStanzaIniziale(); 
+	    this.finita = false;
+	    this.giocatore = new Giocatore();
 	}
 
 	public Labirinto getLabirinto() {
         return this.labirinto;
     }
+	
+	/**
+	 * Imposta il labirinto della partita.
+	 * @param labirinto il nuovo labirinto
+	 */
+	public void setLabirinto(Labirinto labirinto) {
+	    this.labirinto = labirinto;
+	    // quando cambi labirinto, devi resettare la posizione del giocatore
+	    this.stanzaCorrente = labirinto.getStanzaIniziale();
+	}
  
 	public void setStanzaCorrente(Stanza stanzaCorrente) {
 		this.stanzaCorrente = stanzaCorrente;
