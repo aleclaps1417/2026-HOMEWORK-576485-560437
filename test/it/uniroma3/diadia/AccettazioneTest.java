@@ -14,7 +14,7 @@ class AccettazioneTest {
 
 	@Test
 	public void testPartitaSempliceVittoriaImmediata() {
-		// Livello 1: Partita semplice per capire il dominio
+		
 		Labirinto labirinto = new LabirintoBuilder()
 				.addStanzaIniziale("Atrio")
 				.addStanzaVincente("Biblioteca")
@@ -33,7 +33,7 @@ class AccettazioneTest {
 
 	@Test
 	public void testPartitaPerdentePerEsaurimentoCFU() {
-		// Livello 2: Comprendere le regole dei CFU
+
 		Labirinto labirinto = new LabirintoBuilder()
 				.addStanzaIniziale("Atrio")
 				.addStanza("Corridoio")
@@ -41,7 +41,7 @@ class AccettazioneTest {
 				.addAdiacenza("Corridoio", "Atrio", "sud")
 				.getLabirinto();
 		
-		// Creiamo 21 movimenti a vuoto per far stancare il giocatore
+		
 		List<String> comandi = new ArrayList<>();
 		for (int i = 0; i < 11; i++) {
 			comandi.add("vai nord");
@@ -53,7 +53,7 @@ class AccettazioneTest {
 		
 		gioco.gioca();
 		
-		// Verifichiamo l'esaurimento guardando le risposte dell'ultimo comando effettivamente letto (il 19°)
+
 				List<String> messaggiUltimoTurno = simulatore.getMessaggiDellaRiga(19);
 				assertTrue(messaggiUltimoTurno.contains("Hai esaurito i CFU..."), 
 						"Il giocatore avrebbe dovuto finire i CFU dopo 20 passi");
@@ -61,7 +61,7 @@ class AccettazioneTest {
 	
 	@Test
 	public void testAumentareComplessitaConAttrezzi() {
-		// Livello 3: Piu comandi in fila (prendi, vai, posa)
+
 		Labirinto labirinto = new LabirintoBuilder()
 				.addStanzaIniziale("Atrio")
 				.addAttrezzo("lanterna", 3)
@@ -76,7 +76,7 @@ class AccettazioneTest {
 		
 		gioco.gioca();
 		
-		// Interroghiamo la mappa per vedere cosa è successo esattamente al TURNO 2 (il comando "posa lanterna")
+		
 		List<String> messaggiTurnoPosa = simulatore.getMessaggiDellaRiga(2);
 		
 		boolean erroreRilevato = false;

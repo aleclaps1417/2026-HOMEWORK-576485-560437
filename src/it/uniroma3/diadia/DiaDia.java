@@ -60,25 +60,32 @@ public class DiaDia {
      */
     private boolean processaIstruzione(String istruzione) {
         Comando comandoDaEseguire;
+        FabbricaDiComandiRiflessiva factory = new FabbricaDiComandiRiflessiva(this.console);
         
-        // CORREZIONE: Rimuovi 'console' da qui dentro, il costruttore deve essere vuoto
-        FabbricaDiComandiFisarmonica factory = new FabbricaDiComandiFisarmonica();
-
-        comandoDaEseguire = factory.costruisciComando(istruzione);
+        try {
+            // Proviamo a costruire il comando con la reflection
+            comandoDaEseguire = factory.costruisciComando(istruzione);
+            
+        } catch (Exception e) {
+            // Catturiamo qualsiasi errore (ClassNotFound, NullPointer) 
+            // e creiamo direttamente un comando vuoto di emergenza
+            comandoDaEseguire = new ComandoNonValido();
+        }
         
-        // La console viene passata correttamente come secondo parametro qui
+        // ERRORE RISOLTO: Passiamo sia la partita che la console!
         comandoDaEseguire.esegui(this.partita, this.console);
-
+        
         if (this.partita.vinta()) {
             this.console.mostraMessaggio("Hai vinto!");
         }
-
+        
         if (!this.partita.giocatoreIsVivo()) {
             this.console.mostraMessaggio("Hai esaurito i CFU...");
         }
-
+        
         return this.partita.isFinita();
     }
+    
     public static void main(String[] argc) {
         IO io = new IOConsole();
 
