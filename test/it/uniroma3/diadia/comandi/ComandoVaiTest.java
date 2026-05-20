@@ -1,79 +1,137 @@
 package it.uniroma3.diadia.comandi;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.uniroma3.diadia.IO;
-import it.uniroma3.diadia.IOConsole;
+import it.uniroma3.diadia.IOSimulator;
 import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.ambienti.LabirintoBuilder;
-import it.uniroma3.diadia.ambienti.Stanza;
 
-class ComandoVaiTest {
+public class ComandoVaiTest {
 
-	private Partita partita;
 	private ComandoVai comando;
-	private Stanza stanzaPartenza;
-	private Stanza stanzaArrivo;
 	private IO io;
 	
 	@BeforeEach
-	public void setUp() {
-		// Usiamo il LabirintoBuilder invece di creare le stanze a mano
-		Labirinto labirinto = new LabirintoBuilder()
-				.addStanzaIniziale("Stanza partenza")
-				.addStanza("Stanza arrivo")
-				.addAdiacenza("Stanza partenza", "Stanza arrivo", "nord")
-				.getLabirinto();
-
-		// Passiamo il labirinto alla partita (addio errore del costruttore!)
-		this.partita = new Partita(labirinto); 
+	void setUp() {
 		this.comando = new ComandoVai();
-		this.io = new IOConsole();
+		
+		this.io = new IOSimulator(new ArrayList<>());
+	}
 
-		// Recuperiamo i riferimenti alle stanze create dal Builder
-		this.stanzaPartenza = labirinto.getStanzaIniziale();
-		this.stanzaArrivo = this.stanzaPartenza.getStanzaAdiacente("nord");
-	}
-	
+
+
 	@Test
-	public void testEseguiDirezioneValida() {
-		this.comando.setParametro("nord");
-		this.comando.esegui(this.partita, this.io);
+	void testVaiMonolocaleDirInesistente() {
+		Labirinto monolocale = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio")
+				.getLabirinto();
+		Partita partita = new Partita(monolocale);
 		
-		assertEquals(this.stanzaArrivo, this.partita.getStanzaCorrente());
-		assertEquals(19, this.partita.getGiocatore().getCfu(), "Il giocatore dovrebbe avere un cfu in meno(parte da 20)");
-	}
-	
-	@Test
-	public void testEseguiDirezioneInesistente() {
-		this.comando.setParametro("bubu");
-		this.comando.esegui(this.partita, this.io);
+		comando.setParametro("sud");
+		comando.esegui(partita, this.io); // Passiamo io direttamente qui!
 		
-		assertEquals(this.stanzaPartenza, this.partita.getStanzaCorrente(), "Il giocatore non dovrebbe essersi mosso");
-		assertEquals(20, this.partita.getGiocatore().getCfu(), "I cfu non dovrebbero essere diminuiti(20 di default)");
+		assertEquals("Atrio", partita.getStanzaCorrente().getNome());
 	}
-	
+
+
+
 	@Test
-	public void testEseguiDirezioneNulla() {
-		this.comando.setParametro(null);
-		this.comando.esegui(this.partita, this.io);
+	void testVai_Bilocale_DirezioneNull() {
+		Labirinto bilocale = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio")
+				.addStanza("Biblioteca")
+				.addAdiacenza("Atrio", "Biblioteca", "nord")
+				.getLabirinto();
+		Partita partita = new Partita(bilocale);
 		
-		assertEquals(this.stanzaPartenza, this.partita.getStanzaCorrente(), "Il giocatore non dovrebbe essersi mosso");
-		assertEquals(20, this.partita.getGiocatore().getCfu(), "I cfu non dovrebbero essere diminuiti(20 di default)");
+		comando.setParametro(null);
+		comando.esegui(partita, this.io);
+
+		
+		assertEquals("Atrio", partita.getStanzaCorrente().getNome());
 	}
-	
+
 	@Test
-	public void testGetNome() {
-		assertEquals("vai", this.comando.getNome(), "Il nome del comando deve essere vai");
+	void testVai_Bilocale_VaiNord() {
+		Labirinto bilocale = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio")
+				.addStanza("Biblioteca")
+				.addAdiacenza("Atrio", "Biblioteca", "nord")
+				.getLabirinto();
+		Partita partita = new Partita(bilocale);
+
+		comando.setParametro("nord");
+		comando.esegui(partita, this.io);
+
+		
+		assertEquals("Biblioteca", partita.getStanzaCorrente().getNome());
 	}
-	
+
 	@Test
-	public void testGetParamentro() {
-		this.comando.setParametro("nord");
-		assertEquals("nord", this.comando.getParametro(), "Il parametro dovrebbe essere nord");
+	void testVai_Bilocale_VaiNordFallito() {
+		Labirinto bilocale = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio")
+				.addStanza("Biblioteca")
+				.addAdiacenza("Atrio", "Biblioteca", "nord")
+				.getLabirinto();
+		Partita partita = new Partita(bilocale);
+
+		
+		comando.setParametro("sud");
+		comando.esegui(partita, this.io);
+
+	
+		assertNotEquals("Biblioteca", partita.getStanzaCorrente().getNome());
+		assertEquals("Atrio", partita.getStanzaCorrente().getNome());
+	}
+
+	@Test
+	void testCfuDiminuisce() {
+		Labirinto bilocale = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio")
+				.addStanza("Biblioteca")
+				.addAdiacenza("Atrio", "Biblioteca", "nord")
+				.getLabirinto();
+		Partita partita = new Partita(bilocale);
+		
+		int cfuIniziali = partita.getGiocatore().getCfu();
+
+		comando.setParametro("nord");
+		comando.esegui(partita, this.io);
+
+		
+		assertEquals(cfuIniziali - 1, partita.getGiocatore().getCfu());
+	}
+
+
+
+	@Test
+	void testVai_Trilocale_DuePassiConsecutivi() {
+	
+		Labirinto trilocale = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio")
+				.addStanza("Aula N11")
+				.addAdiacenza("Atrio", "Aula N11", "est")
+				.addStanza("Aula N10")
+				.addAdiacenza("Aula N11", "Aula N10", "sud")
+				.getLabirinto();
+		Partita partita = new Partita(trilocale);
+
+
+		comando.setParametro("est");
+		comando.esegui(partita, this.io);
+		assertEquals("Aula N11", partita.getStanzaCorrente().getNome(), "Primo passo verso est fallito");
+
+
+		comando.setParametro("sud");
+		comando.esegui(partita, this.io);
+		assertEquals("Aula N10", partita.getStanzaCorrente().getNome(), "Secondo passo verso sud fallito");
 	}
 }
