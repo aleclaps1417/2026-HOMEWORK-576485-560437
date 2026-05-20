@@ -4,7 +4,7 @@ import it.uniroma3.diadia.IO;
 import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
-public class ComandoRegala implements Comando {
+public class ComandoRegala extends AbstractComando {
 
 	private String nomeAttrezzo;
 
@@ -18,7 +18,7 @@ public class ComandoRegala implements Comando {
 
 		
 		if (partita.getGiocatore().getBorsa().hasAttrezzo(this.nomeAttrezzo)) {
-			// Se c'è, lo prendo dalla borsa e lo rimuovo
+			
 			Attrezzo daRegalare = partita.getGiocatore().getBorsa().getAttrezzo(this.nomeAttrezzo);
 			partita.getGiocatore().getBorsa().removeAttrezzo(this.nomeAttrezzo);
 			
@@ -28,18 +28,12 @@ public class ComandoRegala implements Comando {
 		}
 	}
 
-	@Override
-	public void setParametro(String parametro) {
-		this.nomeAttrezzo = parametro;
-	}
+	
 
 	@Override
 	public String getNome() {
 		return "regala";
 	}
 
-	@Override
-	public String getParametro() {
-		return this.nomeAttrezzo;
-	}
+	
 }
